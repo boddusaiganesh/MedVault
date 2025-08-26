@@ -1,0 +1,202 @@
+/* src/index.css */
+
+/* --- 1. CSS Variables (The Design System) --- */
+:root {
+  --primary-bg: #0d1117; /* GitHub Dark background */
+  --container-bg: rgba(22, 27, 34, 0.75); /* Semi-transparent container */
+  --text-primary: #c9d1d9;
+  --text-secondary: #8b949e;
+  --border-color: rgba(240, 246, 252, 0.1);
+  --accent-color: #2f81f7; /* A vibrant blue for interactions */
+  --success-color: #3fb950;
+  --error-color: #f85149;
+  --font-family: 'Poppins', sans-serif;
+}
+
+/* --- 2. Base & Body Styling --- */
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  background-color: var(--primary-bg);
+  color: var(--text-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  overflow: hidden; /* Prevents scrollbars from the aurora shapes */
+  position: relative; /* Needed for the aurora pseudo-elements */
+}
+
+/* --- 3. The Dynamic "Aurora" Background Animation --- */
+body::before,
+body::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  width: 50vw;
+  height: 50vh;
+  border-radius: 50%;
+  filter: blur(150px);
+  opacity: 0.3;
+}
+
+body::before {
+  background: radial-gradient(circle, #58a6ff, transparent 60%);
+  top: -10%;
+  left: -20%;
+  animation: moveAurora1 20s infinite alternate;
+}
+
+body::after {
+  background: radial-gradient(circle, var(--success-color), transparent 60%);
+  bottom: -10%;
+  right: -20%;
+  animation: moveAurora2 25s infinite alternate;
+}
+
+@keyframes moveAurora1 {
+  from { transform: translate(-20%, -10%) rotate(0deg); }
+  to { transform: translate(20%, 10%) rotate(30deg); }
+}
+@keyframes moveAurora2 {
+  from { transform: translate(10%, 20%) rotate(0deg); }
+  to { transform: translate(-10%, -20%) rotate(-40deg); }
+}
+
+/* --- 4. Main App Container (The Glassmorphism Effect) --- */
+.app-container {
+  width: 100%;
+  max-width: 450px;
+  background: var(--container-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 2rem 2.5rem;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  text-align: center;
+  animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- 5. Typography --- */
+h1 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+h2 {
+  font-size: 1.75rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 1rem;
+}
+
+h3 {
+  color: var(--text-secondary);
+  text-align: left;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+/* --- 6. Form Styling --- */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  text-align: left;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+input, select {
+  background: rgba(13, 17, 23, 0.8);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-family: var(--font-family);
+  transition: all 0.3s ease;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(47, 129, 247, 0.4);
+}
+
+/* --- 7. Button Styling & Animations --- */
+.btn {
+  background-color: var(--accent-color);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.btn:hover {
+  filter: brightness(1.2);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 20px rgba(47, 129, 247, 0.3);
+}
+
+.btn:active {
+  transform: translateY(-1px);
+}
+
+.btn-logout {
+  background: none;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+}
+.btn-logout:hover {
+  background: var(--border-color);
+  color: var(--text-primary);
+  box-shadow: none;
+}
+
+
+/* --- 8. Feedback Messages --- */
+.message, .error {
+  padding: 0.75rem;
+  border-radius: 6px;
+  margin-top: 1rem;
+  animation: fadeIn 0.5s;
+}
+
+.message.success {
+  background-color: rgba(63, 185, 80, 0.1);
+  color: var(--success-color);
+  border: 1px solid var(--success-color);
+}
+
+.message.error {
+  background-color: rgba(248, 81, 73, 0.1);
+  color: var(--error-color);
+  border: 1px solid var(--error-color);
+}
