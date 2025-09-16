@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
-import com.medvault.backend.entity.VerificationStatus;
 
 @Data
 @Builder
@@ -46,18 +45,11 @@ public class Patient {
 
     @Column(name = "emergency_contact")
     private String emergencyContact;
-
-
-    @Builder.Default
-    @Column(name = "is_profile_complete", nullable = false)
-    private boolean isProfileComplete = false;
-
-    @Enumerated(EnumType.STRING)
-    @Builder.Default
-    @Column(name = "verification_status", nullable = false)
-    private VerificationStatus verificationStatus = VerificationStatus.NOT_UPLOADED;
-
-    @Column(name = "government_id_path")
-    private String governmentIdPath;
 }
 
+// You also need to create this Gender enum
+enum Gender {
+    MALE,
+    FEMALE,
+    OTHER
+}

@@ -38,28 +38,4 @@ public class Doctor {
 
     @Column(name = "experience_years")
     private Integer experienceYears;
-
-    @Builder.Default
-    @Column(name = "is_profile_complete", nullable = false)
-    private boolean isProfileComplete = false;
-
-     // --- NEW FIELDS ---
-    @Enumerated(EnumType.STRING)
-    @Builder.Default
-    @Column(name = "verification_status", nullable = false)
-    private VerificationStatus verificationStatus = VerificationStatus.NOT_UPLOADED;
-
-    @Column(name = "medical_degree_path")
-    private String medicalDegreePath;
-
-    @Column(name = "medical_license_path")
-    private String medicalLicensePath;
-
-        // --- NEW TRANSIENT FIELDS ---
-    // These are not stored in the DB, but calculated by a query
-    @Transient
-    private Double averageRating;
-
-    @Transient
-    private Long reviewCount;
 }

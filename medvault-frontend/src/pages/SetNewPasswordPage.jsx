@@ -28,7 +28,7 @@ const SetNewPasswordPage = () => {
         throw new Error("Session token not found. Please log in again.");
       }
       
-      const responseData = await apiSetNewPassword({ newPassword });// Use renamed function
+      const responseData = await apiSetNewPassword({ newPassword }, token); // Use renamed function
 
       setMessage(responseData.message);
       localStorage.removeItem('token');

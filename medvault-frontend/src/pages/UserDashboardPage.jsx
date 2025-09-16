@@ -1,88 +1,67 @@
 // src/pages/UserDashboardPage.jsx
 
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { getPatientDashboardStats } from '../services/api';
-import { LuUser, LuStethoscope, LuCalendarDays } from 'react-icons/lu';
+import { getMyPatientProfile } from '../services/api';
 
 const UserDashboardPage = () => {
-    // --- PRESERVED: State and data fetching logic is correct ---
-    const [stats, setStats] = useState(null);
-    const [loading, setLoading] = useState(true);
+  // State to hold the user's profile data
+  const [profile, setProfile] = useState(null);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchStats = async () => {
-            try {
-                const data = await getPatientDashboardStats();
-                setStats(data);
-            } catch (error) {
-                console.error("Failed to fetch patient dashboard stats:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchStats();
-    }, []);
+  // useEffect runs once when the component mounts
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          throw new Error("No token found.");
+        }
+        // Fetch the logged-in user's specific profile
+        const profileData = await getMyPatientProfile(token);
+        setProfile(profileData);
+      } catch (err) {
+        setError(err.message || 'Could not fetch profile data.');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    if (loading) {
-        return <h2>Loading Dashboard...</h2>;
-    }
+    fetchProfile();
+  }, []); // The empty array [] means this effect runs only once
 
-    return (
-        <div>
-            <h2>Patient Dashboard</h2>
-            
-            {/* --- THE FIX IS HERE --- */}
-            {/* The property is now 'profileComplete' to match the backend DTO */}
-            {!stats?.profileComplete && (
-                <div className="message error" style={{ textAlign: 'center' }}>
-                    <strong>Action Required:</strong> Your profile is incomplete.
-                    <br />
-                    <Link to="/user/profile" style={{ fontWeight: 'bold', color: 'var(--error-color)' }}>
-                        Please complete your profile here
-                    </Link> to book appointments.
-                </div>
-            )}
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    window.location.href = '/login';
+  };
 
-            <p style={{ marginTop: '1.5rem', fontSize: '1.1rem', color: 'var(--text-secondary)' }}>
-                Welcome! Use the options below to manage your health journey.
-            </p>
-            
-            {/* --- PRESERVED: The widget structure is correct --- */}
-            <div className="dashboard-widgets">
-                <Link to="/user/profile" className="widget-card">
-                    <div className="widget-icon patients">
-                        <LuUser />
-                    </div>
-                    <div className="widget-info">
-                        <div className="value" style={{fontSize: '1.5rem'}}>My Profile</div>
-                        <div className="label">Update your personal details</div>
-                    </div>
-                </Link>
+  // --- Render content based on the state ---
+  if (loading) {
+    return <div className="app-container"><h2>Loading Profile...</h2></div>;
+  }
 
-                <Link to="/user/find-doctor" className="widget-card">
-                    <div className="widget-icon doctors">
-                        <LuStethoscope />
-                    </div>
-                    <div className="widget-info">
-                        <div className="value" style={{fontSize: '1.5rem'}}>Find a Doctor</div>
-                        <div className="label">Book a new appointment</div>
-                    </div>
-                </Link>
-
-                <Link to="/user/my-appointments" className="widget-card">
-                    <div className="widget-icon verify">
-                        <LuCalendarDays />
-                    </div>
-                    <div className="widget-info">
-                        <div className="value">{stats?.upcomingAppointments ?? 0}</div>
-                        <div className="label">Upcoming Appointments</div>
-                    </div>
-                </Link>
-            </div>
-        </div>
-    );
+  if (error) {
+    return <div className="app-container"><h2>Error</h2><p className="message error">{error}</p></div>;
+  }
+  
+  return (
+    <div className="app-container">
+      {/* The title is now personalized! */}
+      <h2>Welcome, {profile.firstName}!</h2>
+      <button onClick={handleLogout} className="btn btn-logout">
+        Logout
+      </button>
+      
+      <div style={{ textAlign: 'left', marginTop: '2rem' }}>
+        <h3>Your Details</h3>
+        <p><strong>Name:</strong> {profile.firstName} {profile.lastName}</p>
+        <p><strong>Email:</strong> {profile.email}</p>
+        <p><strong>Contact:</strong> {profile.contactNumber || 'Not set'}</p>
+        <p><strong>Date of Birth:</strong> {profile.dateOfBirth || 'Not set'}</p>
+      </div>
+    </div>
+  );
 };
 
 export default UserDashboardPage;
-

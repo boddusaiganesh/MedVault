@@ -2,12 +2,8 @@ package com.medvault.backend.controller;
 
 import com.medvault.backend.dto.AuthResponseDTO;
 import com.medvault.backend.dto.LoginRequestDTO;
-import com.medvault.backend.dto.RegistrationRequestDTO;
 import com.medvault.backend.dto.SetNewPasswordRequestDTO;
-import com.medvault.backend.entity.PendingRegistration;
-import com.medvault.backend.entity.RegistrationStatus;
 import com.medvault.backend.entity.User;
-import com.medvault.backend.repository.PendingRegistrationRepository;
 import com.medvault.backend.repository.UserRepository;
 import com.medvault.backend.security.JwtUtil;
 import com.medvault.backend.service.UserService;
@@ -31,7 +27,6 @@ public class AuthController {
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
     private final UserService userService;
-     private final PendingRegistrationRepository pendingRegistrationRepository;
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginRequestDTO request) {
@@ -57,30 +52,5 @@ public class AuthController {
         Map<String, String> response = new HashMap<>();
         response.put("message", "Password updated successfully. Please log in again.");
         return ResponseEntity.ok(response);
-    }
-
-    @PostMapping("/register")
-    public ResponseEntity<?> submitRegistrationRequest(@RequestBody RegistrationRequestDTO requestDTO) {
-        // Check if user already exists in the main users table
-        if (userRepository.findByEmail(requestDTO.getEmail()).isPresent()) {
-            return ResponseEntity.badRequest().body("An account with this email already exists.");
-        }
-        // Check if a pending registration with this email already exists
-        if (pendingRegistrationRepository.findByEmail(requestDTO.getEmail()).isPresent()) {
-            return ResponseEntity.badRequest().body("A registration request with this email has already been submitted.");
-        }
-
-        PendingRegistration newRequest = PendingRegistration.builder()
-                .name(requestDTO.getName())
-                .age(requestDTO.getAge())
-                .email(requestDTO.getEmail())
-                .phoneNumber(requestDTO.getPhoneNumber())
-                .requestedRole(requestDTO.getRequestedRole())
-                .status(RegistrationStatus.PENDING) // Default status
-                .build();
-
-        pendingRegistrationRepository.save(newRequest);
-
-        return ResponseEntity.ok("Registration request submitted successfully. Please wait for admin approval.");
     }
 }
