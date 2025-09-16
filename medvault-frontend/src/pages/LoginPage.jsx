@@ -1,15 +1,16 @@
 // src/pages/LoginPage.jsx
 
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { loginUser } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -19,21 +20,21 @@ const LoginPage = () => {
       const credentials = { email, password };
       const responseData = await loginUser(credentials);
 
-      localStorage.setItem('token', responseData.token);
-      localStorage.setItem('role', responseData.role);
+      login({ token: responseData.token, role: responseData.role });
 
+      // --- THE FIX IS IN THIS BLOCK ---
       if (responseData.firstLogin) {
-        navigate('/set-new-password');
-      } else if (responseData.role === 'ROLE_ADMIN') {
-        navigate('/admin/dashboard');
-      } else if (responseData.role === 'ROLE_DOCTOR') {
-        navigate('/doctor/dashboard');
-      } else if (responseData.role === 'ROLE_USER') {
-        navigate('/user/dashboard');
-      } else {
-        // Fallback for any other case
-        navigate('/login');
-      }
+      navigate('/set-new-password');
+    } else if (responseData.role === 'ROLE_ADMIN') {
+      navigate('/admin/dashboard'); // Use the full, explicit path
+    } else if (responseData.role === 'ROLE_DOCTOR') {
+      navigate('/doctor/dashboard'); // Use the full, explicit path
+    } else if (responseData.role === 'ROLE_USER') {
+      navigate('/user/dashboard'); // Use the full, explicit path
+    } else {
+      // Fallback case
+      navigate('/login');
+    }
 
     } catch (err) {
       console.error('Login error:', err);
@@ -41,6 +42,7 @@ const LoginPage = () => {
     }
   };
 
+  // The JSX for the form is correct.
   return (
     <div className="app-container">
       <h1>MedVault</h1>
@@ -73,7 +75,13 @@ const LoginPage = () => {
           Login
         </button>
       </form>
+      <div style={{ marginTop: '2rem', fontSize: '0.9rem' }}>
+        <Link to="/register" style={{ color: 'var(--text-secondary)' }}>
+          Don't have an account? Request one here.
+        </Link>
+      </div>
     </div>
   );
 };
+
 export default LoginPage;

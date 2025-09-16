@@ -34,11 +34,27 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/patient/**").hasRole("USER")
-                        .requestMatchers("/api/doctor/**").hasRole("DOCTOR")
-                        .anyRequest().authenticated()
+                    // Public endpoints
+                    .requestMatchers("/api/auth/**", "/api/public/**").permitAll()
+                    
+                    // Patient (USER) endpoints
+                    .requestMatchers("/api/patient/profile/**").hasRole("USER")
+                    .requestMatchers("/api/patient/doctors/**").hasRole("USER") // For finding doctors and slots
+                    .requestMatchers("/api/patient/appointments/**").hasRole("USER") // For booking
+                    
+                    // Doctor endpoints
+                    .requestMatchers("/api/doctor/profile/**").hasRole("DOCTOR")
+                    .requestMatchers("/api/doctor/slots/**").hasRole("DOCTOR")
+                    .requestMatchers("/api/doctor/appointments/**").hasRole("DOCTOR")
+                    
+                    // Admin endpoints
+                    .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                    
+                    // Document access (already correct)
+                    .requestMatchers("/api/documents/**").authenticated()
+
+                    // Deny all other requests by default
+                    .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)

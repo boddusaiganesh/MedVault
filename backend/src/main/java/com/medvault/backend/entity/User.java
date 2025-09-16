@@ -12,6 +12,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
+import org.hibernate.annotations.CreationTimestamp;
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -38,6 +41,11 @@ public class User implements UserDetails {
 
     @Column(name = "is_first_login", nullable = false)
     private boolean isFirstLogin;
+
+        // --- UPDATE 2: Add the new createdAt field ---
+    @CreationTimestamp // This tells Hibernate to automatically set this value on creation
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
