@@ -1,17 +1,19 @@
 // src/components/ProtectedRoute.jsx
-
 import React from 'react';
 import { Navigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext'; // Import the custom hook
 
 const ProtectedRoute = ({ children }) => {
-  const token = localStorage.getItem('token');
+  const { user, loading } = useAuth();
 
-  if (!token) {
-    // If no token exists, redirect to the login page
-    return <Navigate to="/login" />;
+  if (loading) {
+    return <div className="app-container"><h2>Loading...</h2></div>;
   }
 
-  // If a token exists, show the requested page
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
   return children;
 };
 

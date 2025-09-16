@@ -1,15 +1,16 @@
-/* src/index.css */
+/* src/index.css - FINAL VERIFIED HOSPITAL THEME */
 
 /* --- 1. CSS Variables (The Design System) --- */
 :root {
-  --primary-bg: #0d1117; /* GitHub Dark background */
-  --container-bg: rgba(22, 27, 34, 0.75); /* Semi-transparent container */
-  --text-primary: #c9d1d9;
-  --text-secondary: #8b949e;
-  --border-color: rgba(240, 246, 252, 0.1);
-  --accent-color: #2f81f7; /* A vibrant blue for interactions */
-  --success-color: #3fb950;
-  --error-color: #f85149;
+  --primary-bg: #f8f9fa;
+  --container-bg: #ffffff;
+  --text-primary: #2d3748;
+  --text-secondary: #718096;
+  --border-color: #e2e8f0;
+  --accent-color: #38b2ac;
+  --accent-color-hover: #319795;
+  --success-color: #48bb78;
+  --error-color: #e53e3e;
   --font-family: 'Poppins', sans-serif;
 }
 
@@ -19,63 +20,53 @@ body {
   font-family: var(--font-family);
   background-color: var(--primary-bg);
   color: var(--text-primary);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  overflow: hidden; /* Prevents scrollbars from the aurora shapes */
-  position: relative; /* Needed for the aurora pseudo-elements */
 }
 
-/* --- 3. The Dynamic "Aurora" Background Animation --- */
-body::before,
 body::after {
   content: '';
   position: absolute;
+  width: 200%;
+  height: 100%;
+  top: 0;
+  left: 0;
   z-index: -1;
-  width: 50vw;
-  height: 50vh;
-  border-radius: 50%;
-  filter: blur(150px);
-  opacity: 0.3;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 400'%3E%3Cpath fill='none' stroke='%23e2e8f0' stroke-width='2' d='M0 200 C 200 100, 200 300, 400 200 S 600 100, 800 200' /%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-size: 800px 400px;
+  opacity: 0.5;
+  animation: scrollWave 10s linear infinite;
 }
 
-body::before {
-  background: radial-gradient(circle, #58a6ff, transparent 60%);
-  top: -10%;
-  left: -20%;
-  animation: moveAurora1 20s infinite alternate;
+@keyframes scrollWave {
+  from { background-position-x: 0; }
+  to { background-position-x: -800px; }
 }
 
-body::after {
-  background: radial-gradient(circle, var(--success-color), transparent 60%);
-  bottom: -10%;
-  right: -20%;
-  animation: moveAurora2 25s infinite alternate;
+/* --- 3. Layout Containers --- */
+.layout-centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  min-height: 100vh;
 }
 
-@keyframes moveAurora1 {
-  from { transform: translate(-20%, -10%) rotate(0deg); }
-  to { transform: translate(20%, 10%) rotate(30deg); }
-}
-@keyframes moveAurora2 {
-  from { transform: translate(10%, 20%) rotate(0deg); }
-  to { transform: translate(-10%, -20%) rotate(-40deg); }
+.layout-full {
+  width: 100%;
+  height: 100vh;
 }
 
-/* --- 4. Main App Container (The Glassmorphism Effect) --- */
 .app-container {
   width: 100%;
-  max-width: 450px;
+  max-width: 480px;
   background: var(--container-bg);
   border: 1px solid var(--border-color);
   border-radius: 16px;
-  padding: 2rem 2.5rem;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  padding: 2.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   text-align: center;
   animation: fadeIn 1s ease-out;
+  z-index: 1;
 }
 
 @keyframes fadeIn {
@@ -83,120 +74,616 @@ body::after {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- 5. Typography --- */
-h1 {
-  font-size: 2.5rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 0.5rem;
-}
+/* --- 4. Typography --- */
+h1 { font-size: 2.5rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem; }
+h2 { font-size: 1.5rem; font-weight: 400; color: var(--text-secondary); margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; }
+h3 { color: var(--text-secondary); text-align: left; margin-top: 2rem; margin-bottom: 1rem; font-weight: 500; }
 
-h2 {
-  font-size: 1.75rem;
-  font-weight: 500;
-  color: var(--text-primary);
-  margin-bottom: 2rem;
-  border-bottom: 1px solid var(--border-color);
-  padding-bottom: 1rem;
-}
+/* --- 5. Form Styling --- */
+form { display: flex; flex-direction: column; gap: 1.25rem; text-align: left; }
+.form-group { display: flex; flex-direction: column; }
+label { font-size: 0.9rem; font-weight: 500; color: var(--text-secondary); margin-bottom: 0.5rem; }
 
-h3 {
-  color: var(--text-secondary);
-  text-align: left;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-  font-weight: 500;
-}
-
-/* --- 6. Form Styling --- */
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  text-align: left;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-}
-
-label {
-  font-size: 0.9rem;
-  font-weight: 400;
-  color: var(--text-secondary);
-  margin-bottom: 0.5rem;
-}
-
-input, select {
-  background: rgba(13, 17, 23, 0.8);
+input, select, textarea {
+  background-color: #fdfdff;
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  padding: 0.75rem 1rem;
+  padding: 0.8rem 1rem;
   color: var(--text-primary);
   font-size: 1rem;
   font-family: var(--font-family);
   transition: all 0.3s ease;
 }
 
-input:focus, select:focus {
+input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px rgba(47, 129, 247, 0.4);
+  box-shadow: 0 0 0 3px rgba(56, 178, 172, 0.3);
 }
 
-/* --- 7. Button Styling & Animations --- */
-.btn {
+/* --- 6. Button Styling --- */
+.btn { background-color: var(--accent-color); color: #fff; border: none; border-radius: 8px; padding: 0.9rem 1.5rem; font-size: 1rem; font-weight: 500; cursor: pointer; transition: background-color 0.3s ease; margin-top: 1rem; }
+.btn:hover { background-color: var(--accent-color-hover); }
+.btn:disabled { background-color: #ccc; cursor: not-allowed; }
+.btn-logout { background: none; border: 1px solid var(--border-color); color: var(--text-secondary); padding: 0.6rem 1.2rem; }
+.btn-logout:hover { background: var(--border-color); color: var(--text-primary); box-shadow: none; }
+
+
+
+/* --- 7. Feedback & Link Styling --- */
+.message { padding: 0.8rem 1rem; border-radius: 6px; margin-top: 1rem; text-align: center; animation: fadeIn 0.5s; }
+.message.success { background-color: rgba(72, 187, 120, 0.1); color: var(--success-color); border: 1px solid rgba(72, 187, 120, 0.2); }
+.message.error { background-color: rgba(229, 62, 62, 0.1); color: var(--error-color); border: 1px solid rgba(229, 62, 62, 0.2); }
+a { color: var(--accent-color); text-decoration: none; transition: color 0.2s ease; }
+a:hover { text-decoration: underline; color: var(--accent-color-hover); }
+
+/* --- ADD THIS NEW STYLE HERE --- */
+.message.warning {
+  background-color: rgba(245, 158, 11, 0.1); /* Amber background */
+  color: #d97706; /* Darker amber text */
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+a { color: var(--accent-color); text-decoration: none; transition: color 0.2s ease; }
+a:hover { text-decoration: underline; color: var(--accent-color-hover); }
+
+/* --- 8. Dashboard Layout Styling --- */
+.admin-layout { display: flex; width: 100%; height: 100%; background-color: var(--primary-bg); }
+.sidebar { width: 260px; background-color: #ffffff; border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 1.5rem 1rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+.sidebar-header h3 { text-align: center; color: var(--text-primary); margin-bottom: 2rem; font-size: 1.5rem; }
+.sidebar-nav { display: flex; flex-direction: column; gap: 0.5rem; }
+.sidebar-nav a { color: var(--text-secondary); text-decoration: none; padding: 0.8rem 1rem; border-radius: 6px; transition: all 0.2s ease; font-weight: 500; }
+.sidebar-nav a:hover { background-color: #f1f5f9; color: var(--text-primary); }
+.sidebar-nav a.active { background-color: var(--accent-color); color: #fff; }
+.sidebar-footer { margin-top: auto; }
+.admin-content { flex-grow: 1; padding: 2rem 3rem; overflow-y: scroll; background-color: var(--primary-bg); }
+
+/* --- 9. Component-Specific Styling --- */
+.tabs { display: flex; gap: 0.5rem; border-bottom: 1px solid var(--border-color); margin-bottom: 2rem; }
+.tabs button { background: none; border: none; padding: 0.8rem 1.2rem; cursor: pointer; font-family: var(--font-family); font-size: 1rem; font-weight: 500; color: var(--text-secondary); border-bottom: 3px solid transparent; transition: all 0.2s ease-in-out; }
+.tabs button:hover { background-color: #f1f5f9; color: var(--text-primary); }
+.tabs button.active { color: var(--accent-color); border-bottom-color: var(--accent-color); }
+
+.doctor-card, .appointment-card { border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; margin-bottom: 1rem; background-color: var(--container-bg); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; }
+.doctor-card h3, .appointment-details h4 { margin: 0; color: var(--text-primary); }
+.doctor-card p, .appointment-details p { margin: 0.25rem 0; color: var(--text-secondary); }
+
+.appointments-list { margin-top: 2rem; }
+.status-chip { padding: 0.4rem 0.8rem; border-radius: 9999px; font-weight: 600; font-size: 0.8rem; text-transform: capitalize; }
+.status-chip.approved { background-color: rgba(72, 187, 120, 0.1); color: var(--success-color); }
+.status-chip.pending { background-color: rgba(251, 191, 36, 0.1); color: #d97706; }
+.status-chip.rejected { background-color: rgba(229, 62, 62, 0.1); color: var(--error-color); }
+.status-chip.completed { background-color: rgba(107, 114, 128, 0.1); color: var(--text-secondary); }
+
+.slots-container { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem; }
+.slot-btn {
+  margin-top: 0;
+  background-color: #ffffff;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  font-weight: 500; /* Added for consistency */
+  cursor: pointer;   /* Added for consistency */
+}
+.slot-btn:hover {
+  background-color: #f1f5f9;
+  color: var(--text-primary);
+  border-color: #d1d5db; /* Slightly darken border on hover */
+}
+.slot-btn.active, .slot-btn.active:hover { /* Combined active and active:hover */
   background-color: var(--accent-color);
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 0.8rem 1.5rem;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
+  color: #ffffff;
+  border-color: var(--accent-color);
+}
+
+/* src/index.css - Add this to the bottom */
+
+/* --- 12. Dashboard Widget Styling --- */
+.dashboard-widgets {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.widget-card {
+  background-color: var(--container-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
   transition: all 0.3s ease;
-  margin-top: 1rem;
 }
 
-.btn:hover {
-  filter: brightness(1.2);
-  transform: translateY(-3px);
-  box-shadow: 0 4px 20px rgba(47, 129, 247, 0.3);
+.widget-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.07);
+  border-color: var(--accent-color);
 }
 
-.btn:active {
-  transform: translateY(-1px);
+.widget-icon {
+  font-size: 2.5rem; /* 40px */
+  padding: 0.8rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.btn-logout {
+.widget-icon.patients {
+  color: #3b82f6; /* Blue */
+  background-color: rgba(59, 130, 246, 0.1);
+}
+.widget-icon.doctors {
+  color: #10b981; /* Emerald */
+  background-color: rgba(16, 185, 129, 0.1);
+}
+.widget-icon.verify {
+  color: #f59e0b; /* Amber */
+  background-color: rgba(245, 158, 11, 0.1);
+}
+
+.widget-info .value {
+  font-size: 2.25rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.widget-info .label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* --- Sidebar Icon Styling --- */
+.sidebar-nav a {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem; /* Space between icon and text */
+}
+
+.sidebar-nav a svg {
+  font-size: 1.2rem; /* Icon size */
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+}
+.pagination button { /* Re-style the generic button for this context */
+  background: none;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 0.5rem 1rem;
+}
+.pagination button:hover:not(:disabled) {
+  background-color: #f1f5f9;
+  color: var(--text-primary);
+}
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* --- 13. Table Styling for Admin Lists --- */
+/* This can be used on any page with a data table */
+
+table {
+  width: 100%;
+  border-collapse: collapse; /* Removes space between cell borders */
+  margin-top: 2rem;
+  background-color: var(--container-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px; /* Note: border-collapse interferes with this, so we'll style cells */
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+  overflow: hidden; /* Helps contain the border-radius */
+}
+
+thead {
+  background-color: #f8f9fa; /* A slightly different shade for the header */
+}
+
+th, td {
+  padding: 1rem 1.25rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+th {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+tbody tr {
+  transition: background-color 0.2s ease-in-out;
+}
+
+tbody tr:hover {
+  background-color: #f1f5f9; /* Subtle hover effect for rows */
+}
+
+/* Remove bottom border from the last row in the body for a cleaner look */
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* --- 13. Table Styling --- */
+table {
+  width: 100%;
+  border-collapse: collapse; /* Removes space between cells */
+  margin-top: 2rem;
+  font-size: 0.95rem;
+}
+
+thead {
+  background-color: #f8f9fa; /* A very light header background */
+}
+
+th, td {
+  text-align: left;
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+th {
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+tbody tr:hover {
+  background-color: #fcfdff; /* Subtle hover effect on rows */
+}
+
+/* --- 13. Feedback Modal Styling --- */
+
+/* The full-screen semi-transparent background */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(45, 55, 72, 0.75); /* Semi-transparent charcoal */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* The actual modal popup box */
+.modal-content {
+  background-color: var(--container-bg); /* Clean white */
+  padding: 2rem 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+  animation: fadeIn-scaleUp 0.4s ease-out;
+}
+
+@keyframes fadeIn-scaleUp {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  border: none;
+  padding-bottom: 0;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Styling for the star rating area */
+.star-rating {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.star-rating .star {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.star-rating .star:hover {
+  transform: scale(1.2);
+}
+
+/* Styling for the review textarea */
+.modal-content textarea {
+  width: 100%;
+  box-sizing: border-box; /* Ensures padding is included in the width */
+  margin-bottom: 1rem;
+  resize: vertical; /* Allows user to resize height but not width */
+}
+
+/* Container for the action buttons (Cancel, Submit) */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end; /* Aligns buttons to the right */
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.star-display {
+  color: #ffc107; /* Amber color for stars */
+  display: flex;
+  align-items: center;
+  gap: 0.1rem;
+}
+
+/* src/index.css - Add to bottom */
+
+.reviews-list {
+  margin-top: 2rem;
+}
+
+.review-card {
+  background-color: var(--container-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.review-date {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.review-rating {
+  margin-bottom: 1rem;
+}
+
+.review-text {
+  font-style: italic;
+  color: var(--text-primary);
+  background-color: var(--primary-bg);
+  padding: 1rem;
+  border-radius: 6px;
+  margin: 0;
+}
+
+/* --- Destructive Action Button Styling --- */
+/* This can be used for any "Delete" or "Cancel" button */
+
+.btn-cancel {
+  background-color: var(--error-color);
+  color: #fff;
+}
+
+.btn-cancel:hover {
+  background-color: #c53030; /* A darker shade of red for hover */
+  filter: brightness(1.1); /* Use brightness instead of the default filter */
+  box-shadow: 0 4px 20px rgba(229, 62, 62, 0.3);
+}
+
+/* src/index.css - Add to bottom */
+
+/* --- Styling for Admin User Tables --- */
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2rem;
+  font-size: 0.9rem;
+}
+
+.user-table th, .user-table td {
+  padding: 0.8rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.user-table th {
+  color: var(--text-secondary);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.user-table tbody tr:hover {
+  background-color: #fcfdff;
+}
+
+/* --- Styling for Admin User Tables & Pagination --- */
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse; /* Removes space between table cells */
+  margin-top: 2rem;
+  font-size: 0.9rem;
+  background-color: var(--container-bg); /* Clean white background */
+  border: 1px solid var(--border-color);
+  border-radius: 8px; /* Rounded corners for the table */
+  overflow: hidden; /* Ensures border-radius is applied to corners */
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); /* Subtle shadow */
+}
+
+.user-table th, 
+.user-table td {
+  padding: 0.9rem 1.2rem; /* More spacious padding */
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Style for the table header row */
+.user-table thead {
+  background-color: #f8f9fa; /* Very light gray for the header */
+}
+
+.user-table th {
+  color: var(--text-secondary);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em; /* Adds a bit of space between letters */
+}
+
+/* Style for table body rows on hover */
+.user-table tbody tr:hover {
+  background-color: #fcfdff; /* A slightly different shade for hover */
+}
+
+/* Remove the bottom border from the very last row in the table */
+.user-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+
+/* --- Styling for the Pagination Component --- */
+.pagination {
+  display: flex;
+  justify-content: flex-end; /* Align buttons to the right */
+  align-items: center;
+  gap: 1rem; /* Space between the elements */
+  margin-top: 1.5rem;
+  padding: 0.5rem;
+}
+
+.pagination span {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* Re-style the generic button for the pagination context */
+.pagination button {
+  background-color: #ffffff;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #f1f5f9;
+  border-color: #d1d9e4;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* src/index.css - Add to bottom */
+
+/* --- Styling for Modals (Feedback & Reschedule) --- */
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(13, 17, 23, 0.6); /* Semi-transparent dark overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  background-color: var(--container-bg);
+  padding: 2rem 2.5rem;
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  border: none;
+  padding-bottom: 0.5rem;
+}
+
+.modal-content p {
+  color: var(--text-secondary);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+  border-top: 1px solid var(--border-color);
+  padding-top: 1.5rem;
+}
+
+/* Star Rating (from Feedback Modal, good to have here) */
+.star-rating {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.star-rating .star {
+  cursor: pointer;
+}
+
+/* --- 13. Appointment Reschedule Styling --- */
+/* Add this to the bottom of your existing CSS file */
+
+/* Style for the container of the original and new times */
+.reschedule-info {
+  margin: 0.75rem 0;
+  padding: 0.75rem;
+  background-color: rgba(245, 158, 11, 0.05); /* Very faint warning color */
+  border-left: 4px solid var(--accent-color); /* Use accent color for the border */
+  border-radius: 4px;
+}
+
+.reschedule-info p {
+  margin: 0.25rem 0 !important; /* Override default paragraph margins */
+  font-size: 0.9rem;
+}
+
+.reschedule-info strong {
+  color: var(--text-primary);
+}
+
+
+/* New 'warning' variant for the status chip */
+.status-chip.warning {
+  background-color: rgba(245, 158, 11, 0.1); /* Amber/Yellow background */
+  color: #d97706; /* Darker amber text */
+}
+
+
+/* New 'cancel' variant for buttons */
+.btn-cancel {
   background: none;
   border: 1px solid var(--border-color);
   color: var(--text-secondary);
 }
-.btn-logout:hover {
-  background: var(--border-color);
-  color: var(--text-primary);
-  box-shadow: none;
-}
-
-
-/* --- 8. Feedback Messages --- */
-.message, .error {
-  padding: 0.75rem;
-  border-radius: 6px;
-  margin-top: 1rem;
-  animation: fadeIn 0.5s;
-}
-
-.message.success {
-  background-color: rgba(63, 185, 80, 0.1);
-  color: var(--success-color);
-  border: 1px solid var(--success-color);
-}
-
-.message.error {
-  background-color: rgba(248, 81, 73, 0.1);
-  color: var(--error-color);
-  border: 1px solid var(--error-color);
+.btn-cancel:hover {
+  background: var(--error-color);
+  color: #fff;
+  border-color: var(--error-color);
 }

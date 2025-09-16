@@ -18,13 +18,10 @@ const CreateUserForm = () => {
     setIsSubmitting(true);
 
     try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        throw new Error('Admin token not found. Please log in again.');
-      }
+     
 
       const userData = { name, email, role };
-      const successMessage = await createUser(userData, token);
+      const successMessage = await createUser(userData);
 
       setMessage(successMessage);
       setName('');

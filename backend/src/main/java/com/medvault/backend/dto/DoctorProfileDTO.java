@@ -13,4 +13,5 @@ public class DoctorProfileDTO {
     private String specialization;
     private String qualification;
     private Integer experienceYears;
+    private String contactNumber;
 }
